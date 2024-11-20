@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Message Bubble for Sent or Received -->
+    <LinearLayout
+        android:id="@+id/chatBubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:layout_margin="8dp"
+        android:orientation="vertical"
+        android:background="@drawable/message_bubble_background"
+        android:elevation="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="false">
+
+        <!-- Sender Name (optional, for group chats) -->
+        <TextView
+            android:id="@+id/tvSenderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Doe"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Message Text -->
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is a sample chat message."
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:lineSpacingExtra="2dp" />
+
+        <!-- Timestamp -->
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:34 PM"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="10sp"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
+    <!-- Profile Picture -->
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:layout_marginEnd="8dp"
+        android:layout_alignBottom="@id/chatBubble"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

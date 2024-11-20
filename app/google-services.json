@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "87539755024",
+    "project_id": "application-fire-accident",
+    "storage_bucket": "application-fire-accident.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87539755024:android:3902db82b939a8b5798295",
+        "android_client_info": {
+          "package_name": "com.app.fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdgjqOlgSBoLIDIkINgpYCH0ld83fs37U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87539755024:android:666940ff3112f077798295",
+        "android_client_info": {
+          "package_name": "com.app.fireaccident"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdgjqOlgSBoLIDIkINgpYCH0ld83fs37U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

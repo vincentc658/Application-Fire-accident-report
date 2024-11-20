@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/navy_dark">
+
+        <ImageView
+            android:layout_width="@dimen/size_800"
+            android:layout_height="@dimen/size_800"
+            android:background="@drawable/ic_square_1"
+            android:translationX="@dimen/size_200"
+            android:translationY="@dimen/size_100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="@dimen/size_800"
+            android:layout_height="@dimen/size_800"
+            android:background="@drawable/ic_square_2"
+            android:translationX="@dimen/size_130"
+            android:translationY="@dimen/size_250"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="@dimen/size_32"
+            android:layout_height="@dimen/size_32"
+            android:layout_margin="@dimen/_16dp"
+            android:layout_marginHorizontal="@dimen/size_24"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/ivBack">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/size_24"
+                    android:paddingBottom="@dimen/size_24"
+
+                    app:layout_constraintBottom_toTopOf="@id/tvRegister"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Register"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_20"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Nama"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_14" />
+
+                        <EditText
+                            android:inputType="textCapWords"
+                            android:id="@+id/etName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_white_border_primary_8"
+                            android:padding="@dimen/_16dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Email"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_14" />
+
+                        <EditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_white_border_primary_8"
+                            android:padding="@dimen/_16dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Email"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_14" />
+
+                        <Spinner
+                            android:id="@+id/spinnerUserType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:background="@drawable/background_white_border_primary_8"
+                            android:padding="@dimen/_16dp"
+                            android:entries="@array/user_type_array"
+                            android:spinnerMode="dropdown" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="No. Handphone"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_14" />
+
+                        <EditText
+                            android:inputType="phone"
+                            android:id="@+id/etHp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_white_border_primary_8"
+                            android:padding="@dimen/_16dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Password"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_14" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:id="@+id/etPassword"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/background_8_white"
+                                    android:inputType="textPassword"
+                                    android:padding="@dimen/_16dp" />
+                                <ImageView
+                                    android:tag="0"
+                                    android:id="@+id/ivShowPass"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:src="@drawable/baseline_remove_red_eye_24"
+                                    android:layout_width="@dimen/size_24"
+                                    android:layout_height="@dimen/size_24"/>
+                        </RelativeLayout>
+
+
+                        <TextView
+                            android:id="@+id/tvRegister"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/size_24"
+                            android:layout_marginTop="@dimen/size_32"
+                            android:background="@drawable/background_8_secondary"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="center|bottom"
+                            android:padding="@dimen/_16dp"
+                            android:text="Mulai"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+                </LinearLayout>
+
+
+        </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

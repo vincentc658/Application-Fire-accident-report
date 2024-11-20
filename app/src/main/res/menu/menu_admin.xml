@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_accident_list"
+        android:icon="@drawable/ic_accident"
+        android:title="Accidents" />
+
+    <item
+        android:id="@+id/nav_organization_list"
+        android:icon="@drawable/ic_help"
+        android:title="Organizations" />
+    <item
+        android:id="@+id/nav_stock_distribution"
+        android:icon="@drawable/ic_stock"
+        android:title="Stock" />
+</menu>

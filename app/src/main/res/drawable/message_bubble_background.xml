@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Sent Message -->
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="#DCF8C6" /> <!-- Light Green -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+    <!-- Received Message -->
+    <item>
+        <shape>
+            <solid android:color="#FFFFFF" /> <!-- White -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</selector>

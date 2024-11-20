@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/clParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/navy_dark">
+
+    <ImageView
+        android:layout_width="@dimen/size_800"
+        android:layout_height="@dimen/size_800"
+        android:background="@drawable/ic_square_1"
+        android:translationX="@dimen/size_200"
+        android:translationY="@dimen/size_100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="@dimen/size_800"
+        android:layout_height="@dimen/size_800"
+        android:background="@drawable/ic_square_2"
+        android:translationX="@dimen/size_130"
+        android:translationY="@dimen/size_250"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/size_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Login"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_20"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Email"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_8_white"
+            android:padding="@dimen/size_16" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Password"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_8_white"
+                android:inputType="textPassword"
+                android:padding="@dimen/size_16" />
+            <ImageView
+                android:tag="0"
+                android:id="@+id/ivShowPass"
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/baseline_remove_red_eye_24"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvForgetPass"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Lupa password?"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/size_24"
+        android:layout_marginBottom="@dimen/size_64"
+        android:background="@drawable/background_8_secondary"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center|bottom"
+        android:padding="@dimen/size_16"
+        android:text="Mulai"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_16"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_32"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Belum Punya Akun?"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

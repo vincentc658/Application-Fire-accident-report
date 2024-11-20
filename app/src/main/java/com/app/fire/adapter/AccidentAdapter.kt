@@ -1,0 +1,41 @@
+package com.app.fire.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.app.fire.databinding.ItemFireAccidentBinding
+import com.app.fire.databinding.ItemOrganizationBinding
+import com.app.fire.model.OrganizationModelFirestore
+
+class AccidentAdapter(private val context: Context) :
+    RecyclerView.Adapter<AccidentAdapter.MovieViewHolder>() {
+
+    private val organizations = mutableListOf<OrganizationModelFirestore>()
+
+    fun addAll(organizations: List<OrganizationModelFirestore>) {
+        this.organizations.clear()
+        this.organizations.addAll(organizations)
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val binding =
+            ItemFireAccidentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MovieViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.bind(organizations[position])
+    }
+
+    override fun getItemCount(): Int = organizations.size
+
+    inner class MovieViewHolder(private val binding: ItemFireAccidentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(movie: OrganizationModelFirestore) {
+
+        }
+    }
+}
