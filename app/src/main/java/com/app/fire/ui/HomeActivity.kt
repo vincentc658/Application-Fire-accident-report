@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import com.app.fire.R
 import com.app.fire.databinding.ActivityHomeBinding
 import com.app.fire.ui.fragment.ListAccidentFragment
-import com.app.fire.ui.fragment.ListChatFragment
 import com.app.fire.ui.fragment.ListOrganizationFragment
 import com.app.fire.ui.fragment.ListStockFragment
 import com.app.fire.util.BaseView
@@ -79,6 +78,10 @@ class HomeActivity : BaseView() {
             }
 
             R.id.action_chat -> {
+                if(SessionManager.getTypeUser(this)==1) {
+                    goToPage(ListChatActivity::class.java)
+                    return true
+                }
                 goToPage(ListRoomChat::class.java)
                 // Handle chat menu click
                 return true

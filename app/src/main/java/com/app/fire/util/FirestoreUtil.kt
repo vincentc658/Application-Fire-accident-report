@@ -2,6 +2,7 @@ package com.app.fire.util
 
 
 import com.app.fire.model.BaseModel
+import com.app.fire.model.ChatMessage
 import com.google.firebase.firestore.*
 
 object FirestoreUtil {
@@ -146,5 +147,100 @@ object FirestoreUtil {
                 val dataList = if (snapshot != null) snapshot.toObjects(clazz) else emptyList()
                 onSuccess(dataList)
             }
+    }
+    /**
+     * Get all room chats where senderId matches the specified value.
+     */
+    fun <T> getRoomChatBySenderId(
+        collectionPath: String,
+        senderId: String,
+        clazz: Class<T>,
+        onSuccess: (List<T>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection(collectionPath)
+            .whereEqualTo("senderId", senderId)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val dataList = snapshot.documents.mapNotNull { document ->
+                    try {
+                        val data = document.toObject(clazz)
+                        data?.apply {
+                            if (this is BaseModel) this.id = document.id
+                        }
+                        data
+                    } catch (e: Exception) {
+                        null // Skip documents that fail to parse
+                    }
+                }
+                onSuccess(dataList)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+    fun <T> getRoomChatsBySenderId(
+        roomId: String,
+        clazz: Class<T>,
+        onSuccess: (List<T>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("rooms")
+            .document(roomId)
+            .collection("chats")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val dataList = snapshot.documents.mapNotNull { document ->
+                    try {
+                        val data = document.toObject(clazz)
+                        data?.apply {
+                            if (this is BaseModel) this.id = document.id
+                        }
+                        data
+                    } catch (e: Exception) {
+                        null // Skip documents that fail to parse
+                    }
+                }
+                onSuccess(dataList)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+    fun findRoomByCriteria(
+        field: String,
+        value: Any,
+        onSuccess: (List<String>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("rooms")
+            .whereEqualTo(field, value)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val roomIds = snapshot.documents.mapNotNull { it.id }
+                onSuccess(roomIds)
+            }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+    fun getAllChatsOrderedByTimestamp(
+        roomId: String,
+        clazz: Class<ChatMessage>,
+        onSuccess: (List<ChatMessage>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("rooms")
+            .document(roomId)
+            .collection("chats")
+            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { chatsSnapshot ->
+                val chats = chatsSnapshot.documents.mapNotNull { document ->
+                    document.toObject(clazz)?.apply {
+                        if (this is BaseModel) this.id = document.id
+                    }
+                }
+                onSuccess(chats)
+            }
+            .addOnFailureListener { e -> onFailure(e) }
     }
 }

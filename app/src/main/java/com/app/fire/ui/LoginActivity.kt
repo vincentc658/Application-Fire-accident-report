@@ -107,7 +107,7 @@ class LoginActivity : BaseView() {
                     it.noHp,
                     it.avatar,
                     it.typeUser)
-                showToast("Wellcom, ${it.name}")
+                showToast("Wellcome, ${it.name}")
                 goToPageAndClearPrevious(HomeActivity::class.java)
             }
         }

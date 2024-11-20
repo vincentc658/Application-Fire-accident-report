@@ -68,7 +68,7 @@ class RegisterActivity : BaseView() {
             }
             binding.etPassword.setSelection(binding.etPassword.getValue().length)
         }
-        if(SessionManager.getIsLogin(this)){
+        if (SessionManager.getIsLogin(this)) {
             goToPageAndClearPrevious(HomeActivity::class.java)
         }
     }
@@ -95,6 +95,7 @@ class RegisterActivity : BaseView() {
                             onSuccess = {
                                 hideLoading()
                                 showToast("Registration successful!")
+                                finish()
                             },
                             onFailure = { e ->
                                 hideLoading()

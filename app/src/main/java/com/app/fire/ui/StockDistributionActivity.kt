@@ -3,7 +3,6 @@ package com.app.fire.ui
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.R
-import com.app.fire.adapter.ChatAdapter
 import com.app.fire.adapter.StockDistributionAdapter
 import com.app.fire.databinding.FragmentListChatBinding
 import com.app.fire.model.StockItem

@@ -31,7 +31,8 @@ class ChatRoomAdapter(
     override fun onBindViewHolder(holder: ChatRoomViewHolder, position: Int) {
         val chatRoom = chatList[position]
 
-        holder.username.text = chatRoom.username
+        holder.username.text = chatRoom.senderId
+        holder.username.text = chatRoom.senderId
         holder.lastMessage.text = chatRoom.lastMessage
         holder.timestamp.text = chatRoom.timestamp
         holder.itemView.setOnClickListener {

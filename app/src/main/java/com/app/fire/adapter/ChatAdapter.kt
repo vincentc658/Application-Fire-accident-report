@@ -36,7 +36,7 @@ class ChatAdapter(private val chatList: List<ChatMessage>) :
         holder.timestamp.text = chatMessage.timestamp
 
         // Show/hide sender name and profile for received messages
-        if (!chatMessage.isSent) {
+        if (!chatMessage.sent) {
             holder.senderName.visibility = View.VISIBLE
             holder.senderName.text = chatMessage.senderName
             holder.profileImage.visibility = View.VISIBLE
