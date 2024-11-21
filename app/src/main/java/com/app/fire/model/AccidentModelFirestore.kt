@@ -1,9 +1,11 @@
 package com.app.fire.model
 
 class AccidentModelFirestore(
-    var id:String= "",
-    var name:String= "",
-    var email:String= "",
-    var phoneNumber:String= "",
+    var rumahRusak:Int= 0,
+    var korbanTerdampak:Int= 0,
+    var jumlahKK:Int= 0,
+    var lokasi:String= "",
+    var waktu:String= "",
+    val time: Long=0L,
 ) {
 }

@@ -76,6 +76,12 @@ class HomeActivity : BaseView() {
                 // Handle notification menu click
                 return true
             }
+            R.id.action_logout -> {
+                SessionManager.clearData(this)
+                goToPageAndClearPrevious(LoginActivity::class.java)
+                // Handle notification menu click
+                return true
+            }
 
             R.id.action_chat -> {
                 if(SessionManager.getTypeUser(this)==1) {

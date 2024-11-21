@@ -7,4 +7,5 @@ data class NotificationItem(
     val icon: Int=0, // Resource ID for notification icon
     val roomId : String="",
     val senderId : String="",
+    val time: Long=0L,
 )

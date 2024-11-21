@@ -22,4 +22,7 @@
     <color name="burgundy">#550015</color>
     <color name="blue_900">#0D47A1</color>
     <color name="green_a700">#1B5E20</color>
+    <color name="md_theme_background">#FAFAFA</color>
+    <color name="md_theme_primary">#6200EA</color>
+    <color name="md_theme_onBackground">#212121</color>
 </resources>

@@ -7,14 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.AccidentAdapter
-import com.app.fire.adapter.OrganizationAdapter
 import com.app.fire.databinding.FragmentListAccidentBinding
+import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.OrganizationModelFirestore
+import com.app.fire.ui.FireAccidentActivity
+import com.app.fire.util.BaseView
+import com.app.fire.util.SessionManager
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ListAccidentFragment  : Fragment() {
+class ListAccidentFragment : Fragment() {
     companion object {
         val TAG = "homeMentor"
     }
+
+    private lateinit var adapterOrganization: AccidentAdapter
+
     private lateinit var binding: FragmentListAccidentBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,26 +34,48 @@ class ListAccidentFragment  : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapterOrganization = AccidentAdapter(requireContext())
+        adapterOrganization = AccidentAdapter(requireContext())
         binding.rv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = adapterOrganization
         }
-        adapterOrganization.addAll(arrayListOf(OrganizationModelFirestore(), OrganizationModelFirestore()))
-
+        if (SessionManager.getTypeUser(requireContext()) == 1) {
+            binding.btnAdd.visibility = View.VISIBLE
+        } else {
+            binding.btnAdd.visibility = View.GONE
+        }
+        binding.btnAdd.setOnClickListener {
+            (requireActivity() as BaseView).goToPage(FireAccidentActivity::class.java)
+        }
+        fetchChatMessages()
     }
 
-    fun String?.checkIsEmptyOrNull(): Boolean {
-        if (this == "null") {
-            return true
-        }
-        if (isNullOrEmpty()) {
-            return true
-        }
-        return false
+    private fun fetchChatMessages() {
+        FirebaseFirestore.getInstance().collection("fire_accidents")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val accidents = ArrayList<AccidentModelFirestore>()
+                    task.result?.forEach { document ->
+                        val accidentModelFirestore = AccidentModelFirestore(
+                            rumahRusak = document.data["rumahRusak"].toString().toInt(),
+                            korbanTerdampak = document.data["korbanTerdampak"].toString().toInt(),
+                            jumlahKK = document.data["jumlahKK"].toString().toInt(),
+                            lokasi = document.data["lokasi"].toString(),
+                            waktu = document.data["waktu"].toString(),
+                            time = document.data["time"].toString().toLong()
+                        )
+                        accidents.add(accidentModelFirestore)
+                    }
+                    val sortedBy =accidents.sortedBy { it.time }
+                    adapterOrganization.addAll(sortedBy as ArrayList<AccidentModelFirestore>)
+                }
+            }
+
     }
 
     override fun onResume() {
         super.onResume()
+        fetchChatMessages()
     }
 }

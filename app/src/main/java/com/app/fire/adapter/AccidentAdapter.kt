@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.databinding.ItemFireAccidentBinding
-import com.app.fire.databinding.ItemOrganizationBinding
+import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.OrganizationModelFirestore
 
 class AccidentAdapter(private val context: Context) :
     RecyclerView.Adapter<AccidentAdapter.MovieViewHolder>() {
 
-    private val organizations = mutableListOf<OrganizationModelFirestore>()
+    private val organizations = ArrayList<AccidentModelFirestore>()
 
-    fun addAll(organizations: List<OrganizationModelFirestore>) {
+    fun addAll(organizations: ArrayList<AccidentModelFirestore>) {
         this.organizations.clear()
         this.organizations.addAll(organizations)
         notifyDataSetChanged()
@@ -34,8 +34,12 @@ class AccidentAdapter(private val context: Context) :
     inner class MovieViewHolder(private val binding: ItemFireAccidentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: OrganizationModelFirestore) {
-
+        fun bind(movie: AccidentModelFirestore) {
+            binding.tvLocation.text = "🔥 Lokasi: ${movie.lokasi}"
+            binding.tvTime.text = "🕒 Waktu: ${movie.waktu}"
+            binding.tvDamagedHousesValue.text = movie.rumahRusak.toString()
+            binding.tvVictimsAffectedValue.text = movie.korbanTerdampak.toString()
+            binding.tvHouseholdsValue.text = movie.rumahRusak.toString()
         }
     }
 }

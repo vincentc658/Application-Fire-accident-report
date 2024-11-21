@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.R
 import com.app.fire.model.NotificationItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class NotificationAdapter(private val notifications: List<NotificationItem>) :
@@ -31,8 +33,18 @@ class NotificationAdapter(private val notifications: List<NotificationItem>) :
         holder.icon.setImageResource(notification.icon)
         holder.title.text = notification.title
         holder.message.text = notification.message
-        holder.timestamp.text = notification.timestamp
+        holder.timestamp.text = formatDateTime(notification.timestamp)
     }
 
     override fun getItemCount(): Int = notifications.size
+    private fun formatDateTime(input: String): String {
+        val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("EEE MMM dd HH:mm", Locale.ENGLISH)
+        return try {
+            val date = inputFormat.parse(input) // Parse the input date
+            outputFormat.format(date!!) // Format it to the desired output
+        } catch (e: Exception) {
+            "Invalid date" // Handle parsing errors
+        }
+    }
 }

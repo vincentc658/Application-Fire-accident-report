@@ -46,7 +46,7 @@ class ListChatActivity : BaseView() {
             title = "Chat Rooms"
         }
 
-        adapterChat = ChatAdapter(messages)
+        adapterChat = ChatAdapter()
         binding.rv.apply {
             layoutManager = LinearLayoutManager(this@ListChatActivity)
             adapter = adapterChat
@@ -101,7 +101,8 @@ class ListChatActivity : BaseView() {
             timestamp = Timestamp.now().toDate().toString(),
             roomId = roomId,
             sent = true,
-            senderId = SessionManager.getId(this)
+            senderId = SessionManager.getId(this),
+            time = System.currentTimeMillis()
         )
 
         FirestoreUtil.addDocument(
@@ -120,9 +121,8 @@ class ListChatActivity : BaseView() {
     }
 
     private fun updateUIWithNewMessage(chatMessage: ChatMessage) {
-        messages.add(chatMessage)
-        adapterChat.notifyItemInserted(messages.size - 1)
-        binding.rv.scrollToPosition(messages.size - 1)
+        adapterChat.addData(chatMessage)
+        binding.rv.scrollToPosition(adapterChat.itemCount - 1)
     }
 
     private fun updateRoomLastMessage(lastMessage: String) {
@@ -162,41 +162,57 @@ class ListChatActivity : BaseView() {
         roomId?.let { id ->
             showLoading("")
             FirebaseFirestore.getInstance().collection("chatsList")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .whereEqualTo("roomId", id)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         task.result?.forEach { document ->
+                            Log.e(
+                                "fetchChatMessages",
+                                "${document.data["message"].toString()}test: ${document.data["senderId"].toString()} - ${
+                                    SessionManager.getId(this)
+                                }"
+                            )
                             val chatMessage = ChatMessage(
                                 message = document.data["message"].toString(),
+                                senderName = document.data["senderName"].toString(),
                                 timestamp = document.data["timestamp"].toString(),
                                 sent = document.data["senderId"].toString() == SessionManager.getId(
                                     this
-                                )
+                                ),
+                                time = document.data["time"].toString().toLong()
                             )
                             messages.add(chatMessage)
-                            adapterChat.notifyItemInserted(messages.size - 1)
                         }
-                        binding.rv.scrollToPosition(messages.size - 1)
-                        hideLoading()
                     }
+                    val sortedBy =messages.sortedBy { it.time }
+                    sortedBy.forEach {chatMessage ->
+                        Log.d("sortedBy ", " ${chatMessage.message}")
+                        adapterChat.addData(chatMessage)
+                    }
+                    binding.rv.scrollToPosition(adapterChat.itemCount - 1)
+                    hideLoading()
                 }
         }
+
     }
-    private fun saveNotification(){
+
+    private fun saveNotification() {
         val chatMessage = NotificationItem(
             title = "Notification Chat",
             message = "Kamu mendapat chat baru dari ${SessionManager.getName(this)}",
             timestamp = Timestamp.now().toDate().toString(),
-            roomId = roomId?:"",
-            senderId = SessionManager.getId(this)
+            roomId = roomId ?: "",
+            senderId = SessionManager.getId(this),
+            time = System.currentTimeMillis()
         )
 
         FirestoreUtil.addDocument(
             collectionPath = "notifications",
             data = chatMessage,
             onSuccess = {},
-            onFailure = { e ->}
+            onFailure = { e -> }
         )
     }
 }

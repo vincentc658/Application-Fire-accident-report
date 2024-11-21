@@ -33,8 +33,7 @@ class ChatRoomAdapter(
     override fun onBindViewHolder(holder: ChatRoomViewHolder, position: Int) {
         val chatRoom = chatList[position]
 
-        holder.username.text = chatRoom.senderId
-        holder.username.text = chatRoom.senderId
+        holder.username.text = chatRoom.username
         holder.lastMessage.text = chatRoom.lastMessage
         holder.timestamp.text = formatDateTime(chatRoom.timestamp)
         holder.itemView.setOnClickListener {
@@ -44,7 +43,7 @@ class ChatRoomAdapter(
     }
 
     override fun getItemCount(): Int = chatList.size
-    fun formatDateTime(input: String): String {
+    private fun formatDateTime(input: String): String {
         val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         val outputFormat = SimpleDateFormat("EEE MMM dd HH:mm", Locale.ENGLISH)
         return try {

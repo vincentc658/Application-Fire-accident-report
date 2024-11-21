@@ -6,5 +6,6 @@ data class ChatMessage(
     val senderId: String? = null,
     val roomId: String? = null,
     val timestamp: String="",
-    val sent: Boolean=false
+    val sent: Boolean=false,
+    val time: Long=0L,
 ) : BaseModel()
