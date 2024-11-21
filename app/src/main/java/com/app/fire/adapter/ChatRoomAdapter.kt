@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.R
 import com.app.fire.model.ChatRoom
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ChatRoomAdapter(
     private val chatList: List<ChatRoom>,
@@ -34,7 +36,7 @@ class ChatRoomAdapter(
         holder.username.text = chatRoom.senderId
         holder.username.text = chatRoom.senderId
         holder.lastMessage.text = chatRoom.lastMessage
-        holder.timestamp.text = chatRoom.timestamp
+        holder.timestamp.text = formatDateTime(chatRoom.timestamp)
         holder.itemView.setOnClickListener {
             onClick(chatRoom)
         }
@@ -42,4 +44,14 @@ class ChatRoomAdapter(
     }
 
     override fun getItemCount(): Int = chatList.size
+    fun formatDateTime(input: String): String {
+        val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("EEE MMM dd HH:mm", Locale.ENGLISH)
+        return try {
+            val date = inputFormat.parse(input) // Parse the input date
+            outputFormat.format(date!!) // Format it to the desired output
+        } catch (e: Exception) {
+            "Invalid date" // Handle parsing errors
+        }
+    }
 }

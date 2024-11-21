@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.ChatAdapter
 import com.app.fire.databinding.FragmentListChatBinding
 import com.app.fire.model.ChatMessage
+import com.app.fire.model.NotificationItem
 import com.app.fire.util.BaseView
 import com.app.fire.util.FirestoreUtil
 import com.app.fire.util.SessionManager
@@ -19,90 +20,97 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class ListChatActivity : BaseView() {
     private val firestore = FirebaseFirestore.getInstance()
-    private var roomId: String? = null // Initially null for new room
-    private lateinit var adapterChat: ChatAdapter
-    private val messages = mutableListOf<ChatMessage>()
+    private var roomId: String? = null
     private lateinit var binding: FragmentListChatBinding
+    private val messages = mutableListOf<ChatMessage>()
+    private lateinit var adapterChat: ChatAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupUI()
+        setupSendButton()
+        roomId = intent.extras?.getString("roomId", "")
+        if (SessionManager.getTypeUser(this) == 2) {
+            fetchChatMessages()
+        } else {
+            loadChatData()
+        }
+    }
+
+    private fun setupUI() {
         binding = FragmentListChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Chat Rooms"
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressed() // Go back to the previous screen
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Chat Rooms"
         }
+
         adapterChat = ChatAdapter(messages)
         binding.rv.apply {
             layoutManager = LinearLayoutManager(this@ListChatActivity)
-            adapter = ChatAdapter(messages)
             adapter = adapterChat
         }
-        roomId = intent.getStringExtra("roomId")
+    }
 
-        // Handle Send Button Click
+    private fun setupSendButton() {
         binding.btnSend.setOnClickListener {
             val message = binding.etChatInput.text.toString().trim()
             if (message.isNotEmpty()) {
-                if (SessionManager.getTypeUser(this) == 1) {
-                    if (roomId == null) {
-                        createNewRoomAndSaveMessage(message)
-                    } else {
-                        saveChatToFirestore(message)
-                    }
-                    binding.etChatInput.text?.clear()
-                }
+                sendMessage(message)
+                binding.etChatInput.text?.clear()
             } else {
                 Toast.makeText(this, "Message cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
-        getChatData()
     }
 
-    private fun createNewRoomAndSaveMessage(firstMessage: String) {
-        // Generate a new room ID
+    private fun sendMessage(message: String) {
+        if (roomId == null) {
+            if (SessionManager.getTypeUser(this) == 1) {
+                createNewRoomAndSendMessage(message)
+            }
+        } else {
+            saveChatMessage(message)
+        }
+    }
+
+    private fun createNewRoomAndSendMessage(firstMessage: String) {
         val newRoomRef = firestore.collection("rooms").document()
         roomId = newRoomRef.id
 
         val newRoomData = mapOf(
-            "username" to SessionManager.getName(this), // You can customize this
+            "username" to SessionManager.getName(this),
             "lastMessage" to firstMessage,
             "timestamp" to Timestamp.now().toDate().toString(),
             "senderId" to SessionManager.getId(this)
         )
 
-        // Save the new room and the first message
         newRoomRef.set(newRoomData)
-            .addOnSuccessListener {
-                saveChatToFirestore(firstMessage)
-            }
+            .addOnSuccessListener { saveChatMessage(firstMessage) }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to create room: ${e.message}", Toast.LENGTH_SHORT)
                     .show()
             }
     }
 
-    private fun saveChatToFirestore(message: String) {
-        if (roomId == null) return // Safety check
-
-        val chatData = ChatMessage(
+    private fun saveChatMessage(message: String) {
+        val chatMessage = ChatMessage(
             message = message,
-            senderName = "Your Name", // Replace with the current user's name
-            timestamp = Timestamp.now().toDate()
-                .toString(), // Convert Firestore timestamp to String
+            senderName = SessionManager.getName(this),
+            timestamp = Timestamp.now().toDate().toString(),
             roomId = roomId,
-            sent = SessionManager.getTypeUser(this) != 2,// Assume the user is the sender
+            sent = true,
             senderId = SessionManager.getId(this)
         )
-        messages.add(chatData)
-        adapterChat.notifyItemInserted(messages.size - 1)
-        binding.rv.scrollToPosition(messages.size - 1)
-        // Save the message to the "chats" subcollection
+
         FirestoreUtil.addDocument(
             collectionPath = "chatsList",
-            data = chatData,
+            data = chatMessage,
             onSuccess = {
                 updateRoomLastMessage(message)
+                updateUIWithNewMessage(chatMessage)
+                saveNotification()
             },
             onFailure = { e ->
                 Toast.makeText(this, "Failed to send message: ${e.message}", Toast.LENGTH_SHORT)
@@ -111,38 +119,37 @@ class ListChatActivity : BaseView() {
         )
     }
 
-    private fun updateRoomLastMessage(lastMessage: String) {
-        if (roomId == null) return // Safety check
-
-        val roomUpdate = mapOf(
-            "lastMessage" to lastMessage,
-            "timestamp" to Timestamp.now()
-        )
-
-        // Update the room's last message and timestamp
-        firestore.collection("rooms")
-            .document(roomId!!)
-            .update(roomUpdate)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to update room: ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
-            }
+    private fun updateUIWithNewMessage(chatMessage: ChatMessage) {
+        messages.add(chatMessage)
+        adapterChat.notifyItemInserted(messages.size - 1)
+        binding.rv.scrollToPosition(messages.size - 1)
     }
 
-    private fun getChatData() {
+    private fun updateRoomLastMessage(lastMessage: String) {
+        roomId?.let { id ->
+            val roomUpdate = mapOf(
+                "lastMessage" to lastMessage,
+                "timestamp" to Timestamp.now().toDate().toString(),
+            )
+
+            firestore.collection("rooms")
+                .document(id)
+                .update(roomUpdate)
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to update room: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
+    }
+
+    private fun loadChatData() {
         FirestoreUtil.findRoomByCriteria(
             field = "senderId",
-            value = SessionManager.getId(this), // Replace with the value to search for
+            value = SessionManager.getId(this),
             onSuccess = { roomIds ->
-                if (roomIds.isNotEmpty()) {
-                    roomIds.forEach { room ->
-                        this.roomId = room
-                        getListChat()
-                    }
-                } else {
+                roomIds.firstOrNull()?.let { id ->
+                    roomId = id
+                    fetchChatMessages()
                 }
             },
             onFailure = { e ->
@@ -151,27 +158,45 @@ class ListChatActivity : BaseView() {
         )
     }
 
-    private fun getListChat() {
-        showLoading("")
-        FirebaseFirestore.getInstance().collection("chatsList")
-            .whereEqualTo("roomId", roomId)
-            .get()
-            .addOnCompleteListener { task: Task<QuerySnapshot?> ->
-                if (task.isSuccessful) {
-                    val document = task.result
-                    document?.forEach {
-                        messages.add(
-                            ChatMessage(
-                                message = it.data["message"].toString(),
-                                timestamp = it.data["timestamp"].toString(),
-                                sent = it.data["senderId"].toString() == SessionManager.getId(this)
+    private fun fetchChatMessages() {
+        roomId?.let { id ->
+            showLoading("")
+            FirebaseFirestore.getInstance().collection("chatsList")
+                .whereEqualTo("roomId", id)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        task.result?.forEach { document ->
+                            val chatMessage = ChatMessage(
+                                message = document.data["message"].toString(),
+                                timestamp = document.data["timestamp"].toString(),
+                                sent = document.data["senderId"].toString() == SessionManager.getId(
+                                    this
+                                )
                             )
-                        )
-                        adapterChat.notifyItemInserted(messages.size - 1)
+                            messages.add(chatMessage)
+                            adapterChat.notifyItemInserted(messages.size - 1)
+                        }
                         binding.rv.scrollToPosition(messages.size - 1)
+                        hideLoading()
                     }
-                    hideLoading()
                 }
-            }
+        }
+    }
+    private fun saveNotification(){
+        val chatMessage = NotificationItem(
+            title = "Notification Chat",
+            message = "Kamu mendapat chat baru dari ${SessionManager.getName(this)}",
+            timestamp = Timestamp.now().toDate().toString(),
+            roomId = roomId?:"",
+            senderId = SessionManager.getId(this)
+        )
+
+        FirestoreUtil.addDocument(
+            collectionPath = "notifications",
+            data = chatMessage,
+            onSuccess = {},
+            onFailure = { e ->}
+        )
     }
 }
