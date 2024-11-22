@@ -7,13 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.R
+import com.app.fire.adapter.StockAdapter
 import com.app.fire.adapter.StockDistributionAdapter
 import com.app.fire.databinding.FragmentListChatBinding
 import com.app.fire.databinding.FragmentListOrganizationBinding
+import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.StockItem
+import com.app.fire.ui.StockActivityInputActivity
+import com.app.fire.util.BaseView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ListStockFragment : Fragment() {
     private lateinit var binding: FragmentListOrganizationBinding
+    private lateinit var adapter :StockAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,9 +48,40 @@ class ListStockFragment : Fragment() {
                 R.drawable.ic_inbox_24
             )
         )
+        adapter= StockAdapter()
 
         // Setup RecyclerView
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
-        binding.rv.adapter = StockDistributionAdapter(stockList)
+        binding.rv.adapter = adapter
+        binding.btnAdd.setOnClickListener {
+            (requireActivity() as BaseView).goToPage(StockActivityInputActivity::class.java)
+        }
+        getListLogistic()
     }
+
+    override fun onResume() {
+        super.onResume()
+        getListLogistic()
+    }
+
+    private fun getListLogistic() {
+        FirebaseFirestore.getInstance().collection("stockLogistic")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val accidents = ArrayList<StockItem>()
+                    task.result?.forEach { document ->
+                        val stockItem = StockItem(
+                            itemName = document.data["itemName"].toString(),
+                            quantity = document.data["quantity"].toString(),
+                            distributionDate = document.data["distributionDate"].toString()
+                        )
+                        accidents.add(stockItem)
+                    }
+                    adapter.addAll(accidents)
+                }
+            }
+
+    }
+
 }

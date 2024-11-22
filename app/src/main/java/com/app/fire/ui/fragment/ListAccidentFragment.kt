@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.AccidentAdapter
 import com.app.fire.databinding.FragmentListAccidentBinding
 import com.app.fire.model.AccidentModelFirestore
-import com.app.fire.model.OrganizationModelFirestore
 import com.app.fire.ui.FireAccidentActivity
 import com.app.fire.util.BaseView
 import com.app.fire.util.SessionManager
@@ -68,7 +67,7 @@ class ListAccidentFragment : Fragment() {
                         accidents.add(accidentModelFirestore)
                     }
                     val sortedBy =accidents.sortedBy { it.time }
-                    adapterOrganization.addAll(sortedBy as ArrayList<AccidentModelFirestore>)
+                    adapterOrganization.addAll(sortedBy)
                 }
             }
 

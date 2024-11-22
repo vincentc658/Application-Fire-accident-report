@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.databinding.ItemFireAccidentBinding
 import com.app.fire.model.AccidentModelFirestore
-import com.app.fire.model.OrganizationModelFirestore
 
 class AccidentAdapter(private val context: Context) :
     RecyclerView.Adapter<AccidentAdapter.MovieViewHolder>() {
 
     private val organizations = ArrayList<AccidentModelFirestore>()
 
-    fun addAll(organizations: ArrayList<AccidentModelFirestore>) {
+    fun addAll(organizations: List<AccidentModelFirestore>) {
         this.organizations.clear()
         this.organizations.addAll(organizations)
         notifyDataSetChanged()
