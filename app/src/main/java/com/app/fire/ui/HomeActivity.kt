@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.app.fire.R
 import com.app.fire.databinding.ActivityHomeBinding
 import com.app.fire.ui.fragment.ListAccidentFragment
+import com.app.fire.ui.fragment.ListLogistikPlanFragment
 import com.app.fire.ui.fragment.ListOrganizationFragment
 import com.app.fire.ui.fragment.ListStockFragment
 import com.app.fire.util.BaseView
@@ -50,6 +51,10 @@ class HomeActivity : BaseView() {
                 R.id.nav_stock_distribution ->{
                     supportActionBar?.title="Stock"
                     loadFragment(ListStockFragment())
+                }
+                R.id.nav_distribution_plan ->{
+                    supportActionBar?.title="Distribution"
+                    loadFragment(ListLogistikPlanFragment())
                 }
                 else -> false
             }

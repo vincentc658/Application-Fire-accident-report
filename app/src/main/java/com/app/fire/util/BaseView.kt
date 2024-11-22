@@ -9,6 +9,10 @@ import android.widget.EditText
 import java.io.Serializable
 
 open class BaseView : BaseAppCompat() {
+    companion object{
+        const val LOGISTIC_PLAN="logistikPlan"
+        const val LOGISTIC="logistik"
+    }
     fun <T : Serializable?> getSerializable(intent: Intent, key: String, className: Class<T>): T {
         return if (Build.VERSION.SDK_INT >= 33)
             intent.extras?.getSerializable(key, className)!!

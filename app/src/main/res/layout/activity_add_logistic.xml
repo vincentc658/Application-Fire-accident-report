@@ -1,0 +1,117 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddPlan"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Lokasi -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Lokasi"
+                android:textColor="@color/navy_dark"
+                android:textSize="@dimen/text_14" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+                <Spinner
+                    android:id="@+id/spinnerUserType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_16dp"
+                    android:entries="@array/user_type_array"
+                    android:spinnerMode="dropdown" />
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- Waktu -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/tvWaktu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pilih Waktu"
+                        android:textColor="@color/md_theme_onBackground"
+                        android:padding="8dp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_calendar"
+                        android:tint="@color/navy_dark" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/rvData"
+                android:layout_height="wrap_content"/>
+            <!-- Submit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Logistik"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/navy_dark"
+                android:textColor="@android:color/white"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddPlan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Logistik"
+        android:layout_margin="@dimen/_16dp"
+        android:backgroundTint="@color/navy_dark"
+        android:textColor="@android:color/white"
+        app:cornerRadius="8dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,5 +7,5 @@ class AccidentModelFirestore(
     var lokasi:String= "",
     var waktu:String= "",
     val time: Long=0L,
-) {
+) : BaseModel(){
 }

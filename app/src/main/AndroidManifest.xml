@@ -41,6 +41,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.StockActivityInputActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.AddLogisticActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.StockDistributionActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

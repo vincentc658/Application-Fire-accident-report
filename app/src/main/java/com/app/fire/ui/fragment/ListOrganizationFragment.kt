@@ -9,10 +9,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.OrganizationAdapter
 import com.app.fire.databinding.FragmentListOrganizationBinding
+import com.app.fire.model.AccidentModelFirestore
+import com.app.fire.model.LogisticPlan
 import com.app.fire.model.OrganizationModelFirestore
 import com.app.fire.ui.InputOrganizationActivity
 import com.app.fire.util.BaseView
+import com.app.fire.util.BaseView.Companion.LOGISTIC_PLAN
 import com.app.fire.viewModel.OrganizationViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ListOrganizationFragment : Fragment() {
     companion object {
@@ -60,4 +64,25 @@ class ListOrganizationFragment : Fragment() {
         (requireActivity() as BaseView).showLoading("Loading")
         organizationViewModel.fetchOrganizations()
     }
+    private fun fetchChatMessages() {
+        FirebaseFirestore.getInstance().collection(LOGISTIC_PLAN)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val accidents = ArrayList<LogisticPlan>()
+                    task.result?.forEach { document ->
+                        val logisticPlan = LogisticPlan(
+                            location = document.data["location"].toString(),
+                            accidentId = document.data["accidentId"].toString(),
+                            timestamp = document.data["timestamp"].toString(),
+                            time = document.data["time"].toString().toLong()
+                        )
+                        val array= document.data["logistik"]
+                        accidents.add(logisticPlan)
+                    }
+                }
+            }
+
+    }
+
 }

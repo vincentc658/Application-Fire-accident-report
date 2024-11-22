@@ -13,6 +13,8 @@ import com.app.fire.databinding.FragmentListChatBinding
 import com.app.fire.databinding.FragmentListOrganizationBinding
 import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.StockItem
+import com.app.fire.ui.AddLogisticActivity
+import com.app.fire.ui.FireAccidentActivity
 import com.app.fire.ui.StockActivityInputActivity
 import com.app.fire.util.BaseView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,29 +33,15 @@ class ListStockFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val stockList = listOf(
-            StockItem(
-                "Food Supplies",
-                "50 Packages",
-                "12 Nov 2024",
-                "John Doe",
-                R.drawable.ic_inbox_24
-            ),
-            StockItem("Blankets", "30 Pieces", "10 Nov 2024", "Jane Smith", R.drawable.ic_inbox_24),
-            StockItem(
-                "Medicine Kits",
-                "20 Kits",
-                "08 Nov 2024",
-                "Mike Johnson",
-                R.drawable.ic_inbox_24
-            )
+        adapter= StockAdapter(
+            onClick = { item ->
+            }
         )
-        adapter= StockAdapter()
-
         // Setup RecyclerView
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         binding.btnAdd.setOnClickListener {
+//            (requireActivity() as BaseView).goToPage(AddLogisticActivity::class.java)
             (requireActivity() as BaseView).goToPage(StockActivityInputActivity::class.java)
         }
         getListLogistic()
@@ -73,7 +61,7 @@ class ListStockFragment : Fragment() {
                     task.result?.forEach { document ->
                         val stockItem = StockItem(
                             itemName = document.data["itemName"].toString(),
-                            quantity = document.data["quantity"].toString(),
+                            quantity = document.data["quantity"].toString().toInt(),
                             distributionDate = document.data["distributionDate"].toString()
                         )
                         accidents.add(stockItem)

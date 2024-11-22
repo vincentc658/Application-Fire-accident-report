@@ -30,7 +30,7 @@ class StockDistributionAdapter(private val stockList: List<StockItem>) :
     override fun onBindViewHolder(holder: StockViewHolder, position: Int) {
         val stockItem = stockList[position]
         holder.itemName.text = stockItem.itemName
-        holder.quantity.text = stockItem.quantity
+        holder.quantity.text = stockItem.quantity.toString()
         holder.distributionDate.text = stockItem.distributionDate
         holder.recipient.text = stockItem.recipient
         holder.icon.setImageResource(stockItem.icon)
