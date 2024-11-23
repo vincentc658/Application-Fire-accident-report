@@ -11,6 +11,7 @@ import com.app.fire.R
 import com.app.fire.databinding.ActivityHomeBinding
 import com.app.fire.model.NotificationItem
 import com.app.fire.ui.fragment.ListAccidentFragment
+import com.app.fire.ui.fragment.ListKKFragment
 import com.app.fire.ui.fragment.ListLogistikPlanFragment
 import com.app.fire.ui.fragment.ListOrganizationFragment
 import com.app.fire.ui.fragment.ListStockFragment
@@ -47,26 +48,31 @@ class HomeActivity : BaseView() {
         }
 
         loadFragment(ListAccidentFragment())
+        binding.title.text = "Accidents"
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_accident_list -> {
                     loadFragment(ListAccidentFragment())
-                    supportActionBar?.title = "Accidents"
+                    binding.title.text = "Accidents"
                 }
 
                 R.id.nav_organization_list -> {
-                    supportActionBar?.title = "Organizations"
+                    binding.title.text = "Organizations"
                     loadFragment(ListOrganizationFragment())
                 }
 
                 R.id.nav_stock_distribution -> {
-                    supportActionBar?.title = "Stock"
+                    binding.title.text = "Stock"
                     loadFragment(ListStockFragment())
                 }
 
                 R.id.nav_distribution_plan -> {
-                    supportActionBar?.title = "Distribution"
+                    binding.title.text = "Distribution"
                     loadFragment(ListLogistikPlanFragment())
+                }
+                R.id.nav_distribution_kk -> {
+                    binding.title.text = "KK"
+                    loadFragment(ListKKFragment())
                 }
 
                 else -> false

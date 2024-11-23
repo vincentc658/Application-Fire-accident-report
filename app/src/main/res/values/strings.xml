@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Aplikasi Fire Accident</string>
+    <string name="app_name">Siaga </string>
     <string-array name="user_type_array">
-        <item>User</item>
-        <item>Visitor</item>
+        <item>Masyarakat</item>
+        <item>Admin User</item>
     </string-array>
 </resources>

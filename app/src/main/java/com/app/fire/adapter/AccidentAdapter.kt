@@ -38,7 +38,7 @@ class AccidentAdapter(private val context: Context) :
             binding.tvTime.text = "🕒 Waktu: ${movie.waktu}"
             binding.tvDamagedHousesValue.text = movie.rumahRusak.toString()
             binding.tvVictimsAffectedValue.text = movie.korbanTerdampak.toString()
-            binding.tvHouseholdsValue.text = movie.rumahRusak.toString()
+            binding.tvHouseholdsValue.text = movie.jumlahKK.toString()
         }
     }
 }

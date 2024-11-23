@@ -38,10 +38,10 @@ class ListAccidentFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = adapterOrganization
         }
-        if (SessionManager.getTypeUser(requireContext()) == 1) {
-            binding.btnAdd.visibility = View.VISIBLE
-        } else {
+        if (SessionManager.getTypeUser(requireContext()) == 2) {
             binding.btnAdd.visibility = View.GONE
+        } else {
+            binding.btnAdd.visibility = View.VISIBLE
         }
         binding.btnAdd.setOnClickListener {
             (requireActivity() as BaseView).goToPage(FireAccidentActivity::class.java)

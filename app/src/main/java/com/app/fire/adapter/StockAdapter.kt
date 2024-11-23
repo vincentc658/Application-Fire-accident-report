@@ -70,6 +70,10 @@ class StockAdapter(private var isShowCountItem : Boolean= false,
             stocks[position].quantityPlan=quantity
             notifyItemChanged(position)
         }
+        holder.binding.deleteButton.setOnClickListener {
+            stocks.removeAt(position)
+            notifyItemRemoved(position)
+        }
 
     }
 

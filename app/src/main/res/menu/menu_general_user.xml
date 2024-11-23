@@ -8,4 +8,12 @@
         android:id="@+id/nav_organization_list"
         android:icon="@drawable/ic_help"
         android:title="Organizations" />
+    <item
+        android:id="@+id/nav_distribution_plan"
+        android:icon="@drawable/baseline_assignment_turned_in_24"
+        android:title="Distribusi" />
+    <item
+        android:id="@+id/nav_distribution_kk"
+        android:icon="@drawable/baseline_groups_2_24"
+        android:title="Kebutuhan" />
 </menu>

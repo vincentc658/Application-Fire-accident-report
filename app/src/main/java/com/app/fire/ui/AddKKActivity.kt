@@ -1,13 +1,12 @@
 package com.app.fire.ui
 
 import android.R
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.StockAdapter
-import com.app.fire.databinding.ActivityAddLogisticBinding
+import com.app.fire.databinding.ActivityAddKkBinding
 import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.StockItem
 import com.app.fire.util.BaseView
@@ -16,12 +15,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import java.util.Date
 
-class AddLogisticActivity : BaseView() {
+class AddKKActivity : BaseView() {
     private lateinit var adapter: StockAdapter
-    private lateinit var binding: ActivityAddLogisticBinding
+    private lateinit var binding: ActivityAddKkBinding
     private val firestore = FirebaseFirestore.getInstance()
     private var planId = ""
     var selectedDate: Date? = null
@@ -40,33 +38,16 @@ class AddLogisticActivity : BaseView() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddLogisticBinding.inflate(layoutInflater)
+        binding = ActivityAddKkBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Input Rencana Distribusi"
+        supportActionBar?.title = "Input Nama KK"
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed() // Go back to the previous screen
         }
         binding.btnSubmit.setOnClickListener {
             goToPageActivityResult(StockDistributionActivity::class.java, 100)
-        }
-        binding.tvWaktu.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-            val datePicker = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                val formattedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-                binding.tvWaktu.text = formattedDate
-
-                // Set selectedDate
-                val cal = Calendar.getInstance()
-                cal.set(selectedYear, selectedMonth, selectedDay)
-                selectedDate = cal.time
-            }, year, month, day)
-            datePicker.show()
         }
         adapter = StockAdapter(true,
             onClick = { item ->
@@ -76,34 +57,30 @@ class AddLogisticActivity : BaseView() {
         binding.rvData.layoutManager = LinearLayoutManager(this)
         binding.rvData.adapter = adapter
         binding.btnAddPlan.setOnClickListener {
-            if (adapter.itemCount >= 0 && selectedDate != null) {
-                createDistributionPlan()
+            if (binding.etNamaKK.isTextNotEmpty()) {
+                addKK()
             }
         }
     }
 
-
-    private fun createDistributionPlan() {
+    private fun addKK() {
         showLoading("")
-        // Generate a new room ID
-        val newRoomRef = firestore.collection(LOGISTIC_PLAN).document()
+        val newRoomRef = firestore.collection(KK).document()
         planId = newRoomRef.id
 
         val newPlan = mapOf(
-            "location" to binding.etLocation.text.toString(), // You can customize this
-            "time" to selectedDate?.time,
-            "timestamp" to binding.tvWaktu.text.toString()
+            "namaKK" to binding.etNamaKK.text.toString(), // You can customize this
+            "time" to System.currentTimeMillis()
         )
 
         // Save the new room and the first message
         newRoomRef.set(newPlan)
             .addOnSuccessListener {
                 adapter.getData().forEach {
-                    saveChatToFirestore(it)
+                    save(it)
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(2000)
                         hideLoading()
-                        showToast("Success add plan")
                         finish()
                     }
                 }
@@ -113,7 +90,7 @@ class AddLogisticActivity : BaseView() {
             }
     }
 
-    private fun saveChatToFirestore(stock: StockItem) {
+    private fun save(stock: StockItem) {
         if (planId == null) return // Safety check
 
         val chatData = hashMapOf(
@@ -123,7 +100,7 @@ class AddLogisticActivity : BaseView() {
         )
 
         // Save the message to the "chats" subcollection
-        firestore.collection(LOGISTIC_PLAN)
+        firestore.collection(KK)
             .document(planId)
             .collection(LOGISTIC)
             .add(chatData)

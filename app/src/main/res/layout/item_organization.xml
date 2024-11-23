@@ -39,9 +39,9 @@
             android:textColor="@android:color/black"
             android:ellipsize="end"
             android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/ivCall"
             app:layout_constraintStart_toEndOf="@id/ivOrganizationIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- Organization Number -->
         <TextView
@@ -55,9 +55,9 @@
             android:textColor="@android:color/darker_gray"
             android:ellipsize="end"
             android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/ivCall"
             app:layout_constraintStart_toEndOf="@id/ivOrganizationIcon"
             app:layout_constraintTop_toBottomOf="@id/tvOrganizationName"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="4dp" />
 
         <!-- Organization Email -->
@@ -74,8 +74,19 @@
             android:maxLines="1"
             app:layout_constraintStart_toEndOf="@id/ivOrganizationIcon"
             app:layout_constraintTop_toBottomOf="@id/tvOrganizationNumber"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivCall"
             android:layout_marginTop="4dp" />
+        <ImageView
+            android:id="@+id/ivCall"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Organization Icon"
+            android:src="@drawable/ic_call_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/navy_dark" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

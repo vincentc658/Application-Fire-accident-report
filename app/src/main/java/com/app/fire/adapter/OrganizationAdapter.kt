@@ -1,6 +1,8 @@
 package com.app.fire.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +40,12 @@ class OrganizationAdapter(private val context: Context) :
             binding.tvOrganizationName.text = movie.name
             binding.tvOrganizationNumber.text =
                 movie.phoneNumber.chunked(4).joinToString(separator = " ")
+            itemView.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://wa.me/${movie.phoneNumber}")
+                }
+                context.startActivity(intent)
+            }
         }
     }
 }
