@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.fire.adapter.AccidentAdapter
+import com.app.fire.adapter.DistributionPlanAdapter
 import com.app.fire.adapter.OrganizationAdapter
 import com.app.fire.databinding.FragmentListOrganizationBinding
 import com.app.fire.model.AccidentModelFirestore
@@ -17,17 +21,17 @@ import com.app.fire.util.BaseView
 import com.app.fire.util.BaseView.Companion.LOGISTIC_PLAN
 import com.app.fire.viewModel.OrganizationViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ListLogistikPlanFragment : Fragment() {
     companion object {
         val TAG = "homeMentor"
     }
+    private lateinit var distributionPlanAdapter: DistributionPlanAdapter
 
     private lateinit var binding: FragmentListOrganizationBinding
-    private lateinit var organizationViewModel: OrganizationViewModel
-    private val adapterOrganizationAdapter: OrganizationAdapter by lazy {
-        OrganizationAdapter(requireContext())
-    }
+
     val distributionPlan = ArrayList<LogisticPlan>()
 
     override fun onCreateView(
@@ -41,60 +45,66 @@ class ListLogistikPlanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        distributionPlanAdapter = DistributionPlanAdapter(requireContext())
+        binding.rv.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = distributionPlanAdapter
+        }
         binding.btnAdd.setOnClickListener {
-            distributionPlan.forEach {
-                Log.e("getAllLogisticPlan", "data: ${it.location}")
-                it.data.forEach {stock->
-                    Log.e("getAllLogisticPlan", "data: ${stock.itemName} ${stock.quantity}")
-                }
-            }
             (requireActivity() as BaseView).goToPage(AddLogisticActivity::class.java)
         }
-        getAllLogisticPlan()
+        lifecycleScope.launch {
+            (requireActivity() as BaseView).showLoading("")
+            val plans = getAllLogisticPlan2()
+            distributionPlanAdapter.addAll(plans)
+            (requireActivity() as BaseView).hideLoading()
+        }
     }
 
-    private fun getAllLogisticPlan() {
-        Log.e("getAllLogisticPlan", "start")
-        FirebaseFirestore.getInstance().collection(LOGISTIC_PLAN)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val documentId = document.id // ID of the logisticPlan document
-                    val logisticPlan = LogisticPlan(
-                        location = document.data["location"].toString(),
-                        accidentId = document.data["accidentId"].toString(),
-                        timestamp = document.data["timestamp"].toString(),
-                        time = document.data["time"].toString().toLong()
-                    )
+    suspend fun getAllLogisticPlan2(): List<LogisticPlan> {
+        val distributionPlan = ArrayList<LogisticPlan>()
 
-                    FirebaseFirestore.getInstance()
-                        .collection(LOGISTIC_PLAN)
-                        .document(documentId)
-                        .collection("logistik") // Access the subcollection
-                        .get()
-                        .addOnSuccessListener { subDocuments ->
-                            for (subDocument in subDocuments) {
-                                val idItem = subDocument.getString("idItem")
-                                val itemName = subDocument.getString("itemName")
-                                val quantity = subDocument.getLong("quantity")
-                                val stock = StockItem(
-                                    itemName = itemName ?: "",
-                                    quantity = quantity?.toInt() ?: 0,
-                                )
-                                logisticPlan.data.add(stock)
-                            }
-                            distributionPlan.add(logisticPlan)
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("FirestoreError", "Error retrieving logistik data: ${e.message}")
-                        }
-                    Log.e("getAllLogisticPlan", "---------------->>>>>>>>>>>>")
+        val documents = FirebaseFirestore.getInstance().collection(LOGISTIC_PLAN)
+            .get().await() // Use Kotlin Coroutines' await() for Firestore tasks
 
-                }
+        for (document in documents) {
+            val documentId = document.id
+            val logisticPlan = LogisticPlan(
+                location = document.data["location"].toString(),
+                accidentId = document.data["accidentId"].toString(),
+                timestamp = document.data["timestamp"].toString(),
+                time = document.data["time"].toString().toLong()
+            )
+
+            val subDocuments = FirebaseFirestore.getInstance()
+                .collection(LOGISTIC_PLAN)
+                .document(documentId)
+                .collection("logistik")
+                .get().await()
+
+            for (subDocument in subDocuments) {
+                val idItem = subDocument.getString("idItem")
+                val itemName = subDocument.getString("itemName")
+                val quantity = subDocument.getLong("quantity")
+                val stock = StockItem(
+                    itemName = itemName ?: "",
+                    quantity = quantity?.toInt() ?: 0,
+                )
+                logisticPlan.data.add(stock)
             }
-            .addOnFailureListener { e ->
-                Log.e("FirestoreError", "Error retrieving logisticPlan data: ${e.message}")
-            }
+            distributionPlan.add(logisticPlan)
+        }
+        distributionPlan.sortBy { it.time }
+        return distributionPlan
+    }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            (requireActivity() as BaseView).showLoading("")
+            val plans = getAllLogisticPlan2()
+            distributionPlanAdapter.addAll(plans)
+            (requireActivity() as BaseView).hideLoading()
+        }
     }
 }

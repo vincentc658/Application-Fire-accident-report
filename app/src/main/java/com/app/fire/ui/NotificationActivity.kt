@@ -12,11 +12,12 @@ import com.app.fire.databinding.FragmentListChatBinding
 import com.app.fire.model.ChatMessage
 import com.app.fire.model.NotificationItem
 import com.app.fire.model.OrganizationModelFirestore
+import com.app.fire.util.BaseView
 import com.app.fire.util.FirestoreUtil
 import com.app.fire.util.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 
-class NotificationActivity : AppCompatActivity() {
+class NotificationActivity : BaseView() {
     private lateinit var notificationAdapter: NotificationAdapter
     private val notifications = mutableListOf<NotificationItem>()
     private lateinit var binding: ActivityNotificationBinding
@@ -32,7 +33,12 @@ class NotificationActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        notificationAdapter = NotificationAdapter(notifications)
+        notificationAdapter = NotificationAdapter(notifications){
+            val bundle = Bundle()
+            bundle.putString("roomId", it.roomId)
+            goToPage(ListChatActivity::class.java, bundle)
+        }
+
         binding.recyclerViewNotifications.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewNotifications.adapter = notificationAdapter
         loadChatData()

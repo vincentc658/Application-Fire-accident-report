@@ -7,12 +7,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.R
+import com.app.fire.model.ChatRoom
 import com.app.fire.model.NotificationItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class NotificationAdapter(private val notifications: List<NotificationItem>) :
+class NotificationAdapter(
+    private val notifications: List<NotificationItem>,
+    private val onClick: (notificationItem: NotificationItem) -> Unit
+) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     inner class NotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,6 +38,9 @@ class NotificationAdapter(private val notifications: List<NotificationItem>) :
         holder.title.text = notification.title
         holder.message.text = notification.message
         holder.timestamp.text = formatDateTime(notification.timestamp)
+        holder.itemView.setOnClickListener {
+            onClick(notification)
+        }
     }
 
     override fun getItemCount(): Int = notifications.size
