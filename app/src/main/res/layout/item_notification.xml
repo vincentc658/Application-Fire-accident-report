@@ -10,6 +10,7 @@
     android:padding="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clParent"
         android:layout_width="match_parent"
         android:padding="@dimen/_16dp"
         android:layout_height="wrap_content">

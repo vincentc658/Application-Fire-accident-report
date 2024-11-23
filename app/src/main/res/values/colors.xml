@@ -19,6 +19,7 @@
     <color name="navy_dark_50">#9007122A</color>
     <color name="light_gray">#4F4F4F</color>
     <color name="light_gray_2">#AAAAAA</color>
+    <color name="very_light_gray">#EFEFEF</color>
     <color name="burgundy">#550015</color>
     <color name="blue_900">#0D47A1</color>
     <color name="green_a700">#1B5E20</color>

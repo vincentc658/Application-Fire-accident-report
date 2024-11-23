@@ -2,19 +2,15 @@ package com.app.fire.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.R
 import com.app.fire.adapter.NotificationAdapter
 import com.app.fire.databinding.ActivityNotificationBinding
-import com.app.fire.databinding.FragmentListChatBinding
-import com.app.fire.model.ChatMessage
 import com.app.fire.model.NotificationItem
-import com.app.fire.model.OrganizationModelFirestore
 import com.app.fire.util.BaseView
 import com.app.fire.util.FirestoreUtil
 import com.app.fire.util.SessionManager
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 
 class NotificationActivity : BaseView() {
@@ -33,15 +29,15 @@ class NotificationActivity : BaseView() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        notificationAdapter = NotificationAdapter(notifications){
+        notificationAdapter = NotificationAdapter(this) {
             val bundle = Bundle()
             bundle.putString("roomId", it.roomId)
             goToPage(ListChatActivity::class.java, bundle)
+            updateStatus(it.id)
         }
 
         binding.recyclerViewNotifications.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewNotifications.adapter = notificationAdapter
-        loadChatData()
     }
 
     private fun getNotification() {
@@ -59,8 +55,11 @@ class NotificationActivity : BaseView() {
                                 timestamp = document.data["timestamp"].toString(),
                                 roomId = document.data["roomId"].toString(),
                                 senderId = document.data["senderId"].toString(),
+                                isRead = (document.data["isRead"] ?: "false").toString()
+                                    .toBoolean(),
                                 icon = R.drawable.ic_notifications
                             )
+                            notificationItem.id = document.id
                             if (SessionManager.getTypeUser(this) == 2) { // admin
                                 notifications.add(notificationItem)
                             } else {
@@ -68,15 +67,16 @@ class NotificationActivity : BaseView() {
                                     notifications.add(notificationItem)
                                 }
                             }
-                            notificationAdapter.notifyItemInserted(notifications.size - 1)
                         }
                     }
+                    notificationAdapter.addAll(notifications)
                     binding.recyclerViewNotifications.scrollToPosition(notifications.size - 1)
                 }
             }
     }
 
     private fun loadChatData() {
+        notifications.clear()
         if (SessionManager.getTypeUser(this) == 2) { // admin
             getNotification()
             return
@@ -94,5 +94,17 @@ class NotificationActivity : BaseView() {
                 Log.e("FirestoreError", "Failed to find rooms: ${e.message}")
             }
         )
+    }
+
+    private fun updateStatus(id: String) {
+        val dataNotification = HashMap<String, Any>()
+        dataNotification["isRead"] = true
+        FirebaseFirestore.getInstance().collection(NOTIFICATIONS).document(id)
+            .update(dataNotification)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadChatData()
     }
 }
