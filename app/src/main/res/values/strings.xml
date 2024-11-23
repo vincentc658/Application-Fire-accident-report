@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Siaga </string>
+    <string name="app_name">Siaga Kebakaran</string>
     <string-array name="user_type_array">
         <item>Masyarakat</item>
         <item>Admin User</item>

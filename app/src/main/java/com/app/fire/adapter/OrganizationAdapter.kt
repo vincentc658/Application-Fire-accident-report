@@ -4,10 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.databinding.ItemOrganizationBinding
 import com.app.fire.model.OrganizationModelFirestore
+import com.app.fire.util.BaseView
+import com.app.fire.util.BaseView.Companion.LOGISTIC_PLAN
+import com.app.fire.util.SessionManager
+import com.google.firebase.firestore.FirebaseFirestore
 
 class OrganizationAdapter(private val context: Context) :
     RecyclerView.Adapter<OrganizationAdapter.MovieViewHolder>() {
@@ -45,6 +50,20 @@ class OrganizationAdapter(private val context: Context) :
                     data = Uri.parse("https://wa.me/${movie.phoneNumber}")
                 }
                 context.startActivity(intent)
+            }
+            if(SessionManager.getTypeUser(context)==2){
+                binding.ivDelete.visibility= View.VISIBLE
+            }else{
+                binding.ivDelete.visibility= View.GONE
+            }
+            binding.ivDelete.setOnClickListener {
+                (context as BaseView).showLoading("")
+                FirebaseFirestore.getInstance().collection("organizations").document(movie.id).delete()
+                    .addOnSuccessListener {
+                        organizations.removeAt(layoutPosition)
+                        notifyItemRemoved(layoutPosition)
+                        (context as BaseView).hideLoading()
+                    }
             }
         }
     }

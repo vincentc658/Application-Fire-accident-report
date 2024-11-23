@@ -49,8 +49,9 @@ class FireAccidentActivity : BaseView() {
             val korbanTerdampak = binding.etKorbanTerdampak.text.toString().trim()
             val jumlahKK = binding.etJumlahKK.text.toString().trim()
             val lokasi = binding.etLokasi.text.toString().trim()
+            val jam = binding.etJam.text.toString().trim()
 
-            if (rumahRusak.isEmpty() || korbanTerdampak.isEmpty() || jumlahKK.isEmpty() || lokasi.isEmpty() || selectedDate == null) {
+            if (rumahRusak.isEmpty() || korbanTerdampak.isEmpty() || jumlahKK.isEmpty() || lokasi.isEmpty()|| jam.isEmpty() || selectedDate == null) {
                 Toast.makeText(this, "Harap isi semua data!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -61,6 +62,7 @@ class FireAccidentActivity : BaseView() {
                 "korbanTerdampak" to korbanTerdampak.toInt(),
                 "jumlahKK" to jumlahKK.toInt(),
                 "lokasi" to lokasi,
+                "jam" to jam,
                 "waktu" to formatDate(selectedDate!!),
                 "time" to System.currentTimeMillis()
             )
@@ -83,4 +85,5 @@ class FireAccidentActivity : BaseView() {
         val formatter = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID")) // Indonesian locale for correct month names
         return formatter.format(date)
     }
+
 }

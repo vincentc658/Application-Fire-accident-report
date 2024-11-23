@@ -2,10 +2,16 @@ package com.app.fire.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.fire.databinding.ItemFireAccidentBinding
 import com.app.fire.model.AccidentModelFirestore
+import com.app.fire.util.BaseView
+import com.app.fire.util.BaseView.Companion.FIRE_ACCIDENT
+import com.app.fire.util.BaseView.Companion.LOGISTIC_PLAN
+import com.app.fire.util.SessionManager
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AccidentAdapter(private val context: Context) :
     RecyclerView.Adapter<AccidentAdapter.MovieViewHolder>() {
@@ -39,6 +45,20 @@ class AccidentAdapter(private val context: Context) :
             binding.tvDamagedHousesValue.text = movie.rumahRusak.toString()
             binding.tvVictimsAffectedValue.text = movie.korbanTerdampak.toString()
             binding.tvHouseholdsValue.text = movie.jumlahKK.toString()
+            if(SessionManager.getTypeUser(context)==2){
+                binding.ivDelete.visibility= View.VISIBLE
+            }else{
+                binding.ivDelete.visibility= View.GONE
+            }
+            binding.ivDelete.setOnClickListener {
+                (context as BaseView).showLoading("")
+                FirebaseFirestore.getInstance().collection(FIRE_ACCIDENT).document(movie.id).delete()
+                    .addOnSuccessListener {
+                        organizations.removeAt(layoutPosition)
+                        notifyItemRemoved(layoutPosition)
+                        (context as BaseView).hideLoading()
+                    }
+            }
         }
     }
 }

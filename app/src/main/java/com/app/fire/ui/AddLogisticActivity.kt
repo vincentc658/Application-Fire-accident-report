@@ -68,7 +68,7 @@ class AddLogisticActivity : BaseView() {
             }, year, month, day)
             datePicker.show()
         }
-        adapter = StockAdapter(true,
+        adapter = StockAdapter(this, isShowCountItem = true,
             onClick = { item ->
             })
 
@@ -76,7 +76,7 @@ class AddLogisticActivity : BaseView() {
         binding.rvData.layoutManager = LinearLayoutManager(this)
         binding.rvData.adapter = adapter
         binding.btnAddPlan.setOnClickListener {
-            if (adapter.itemCount >= 0 && selectedDate != null) {
+            if (adapter.itemCount >= 0 && selectedDate != null && binding.etJam.isTextNotEmpty()) {
                 createDistributionPlan()
             }
         }
@@ -92,6 +92,7 @@ class AddLogisticActivity : BaseView() {
         val newPlan = mapOf(
             "location" to binding.etLocation.text.toString(), // You can customize this
             "time" to selectedDate?.time,
+            "jam" to binding.etJam.text.toString(),
             "timestamp" to binding.tvWaktu.text.toString()
         )
 

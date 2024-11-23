@@ -77,7 +77,7 @@ class ListOrganizationFragment : Fragment() {
                             timestamp = document.data["timestamp"].toString(),
                             time = document.data["time"].toString().toLong()
                         )
-                        val array= document.data["logistik"]
+                        logisticPlan.id= document.id
                         accidents.add(logisticPlan)
                     }
                 }

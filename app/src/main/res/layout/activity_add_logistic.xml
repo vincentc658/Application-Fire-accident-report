@@ -56,7 +56,24 @@
                     android:padding="@dimen/size_12" />
 
             </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="8dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etJam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Input Jam"
+                    android:inputType="textCapWords"
+                    android:padding="@dimen/size_12" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Waktu -->
             <com.google.android.material.card.MaterialCardView

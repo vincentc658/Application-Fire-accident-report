@@ -33,7 +33,7 @@ class ListStockFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter= StockAdapter(
+        adapter= StockAdapter(context = requireActivity(), isShowDelete = true,
             onClick = { item ->
             }
         )
@@ -64,6 +64,7 @@ class ListStockFragment : Fragment() {
                             quantity = document.data["quantity"].toString().toInt(),
                             distributionDate = document.data["distributionDate"].toString()
                         )
+                        stockItem.id= document.id
                         accidents.add(stockItem)
                     }
                     adapter.addAll(accidents)

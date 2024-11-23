@@ -6,4 +6,4 @@ data class LogisticPlan(
     var time: Long = 0L,
     var timestamp: String = "",
     var data: ArrayList<StockItem> = ArrayList()
-)
+) : BaseModel()

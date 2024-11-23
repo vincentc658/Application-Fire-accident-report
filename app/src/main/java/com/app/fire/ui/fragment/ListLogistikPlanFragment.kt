@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.fire.adapter.AccidentAdapter
 import com.app.fire.adapter.DistributionPlanAdapter
-import com.app.fire.adapter.OrganizationAdapter
 import com.app.fire.databinding.FragmentListOrganizationBinding
 import com.app.fire.model.AccidentModelFirestore
 import com.app.fire.model.LogisticPlan
@@ -72,9 +71,10 @@ class ListLogistikPlanFragment : Fragment() {
             val logisticPlan = LogisticPlan(
                 location = document.data["location"].toString(),
                 accidentId = document.data["accidentId"].toString(),
-                timestamp = document.data["timestamp"].toString(),
+                timestamp = "${document.data["timestamp"].toString()} / ${document.data["jam"].toString().toValidString()}",
                 time = document.data["time"].toString().toLong()
             )
+            logisticPlan.id= documentId
 
             val subDocuments = FirebaseFirestore.getInstance()
                 .collection(LOGISTIC_PLAN)
@@ -106,5 +106,11 @@ class ListLogistikPlanFragment : Fragment() {
             distributionPlanAdapter.addAll(plans)
             (requireActivity() as BaseView).hideLoading()
         }
+    }
+    private fun String.toValidString(): String{
+        if(this=="null"){
+            return "-"
+        }
+        return this
     }
 }

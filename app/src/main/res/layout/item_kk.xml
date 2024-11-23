@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardElevation="4dp"
+    android:backgroundTint="@color/white"
     app:cardCornerRadius="12dp"
-    android:backgroundTint="@color/white">
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground">
+        android:padding="16dp">
 
-        <!-- Header: Location -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Header: Location -->
+            <TextView
+                android:id="@+id/tvKK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/navy_dark_50"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivDelete"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_delete_outline_24" />
+        </RelativeLayout>
+
         <TextView
-            android:id="@+id/tvKK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/navy_dark_50"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1" />
-
-        <TextView
             android:layout_marginTop="@dimen/_8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Kebutuhan :"
             android:textColor="@android:color/darker_gray"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/tvLogistic"
             android:layout_width="match_parent"
@@ -42,7 +53,7 @@
             android:layout_marginHorizontal="@dimen/_8dp"
             android:text="Daftar Logistik :"
             android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
 
     </LinearLayout>

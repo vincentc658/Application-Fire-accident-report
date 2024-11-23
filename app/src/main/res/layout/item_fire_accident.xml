@@ -17,17 +17,29 @@
         android:background="?attr/selectableItemBackground">
 
         <!-- Header: Location -->
-        <TextView
-            android:id="@+id/tvLocation"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🔥 Lokasi: [Nama Lokasi]"
-            android:textColor="@color/navy_dark_50"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔥 Lokasi: [Nama Lokasi]"
+                android:textColor="@color/navy_dark_50"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/ivDelete"
+                android:src="@drawable/ic_delete_outline_24"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"/>
+        </RelativeLayout>
 
         <!-- Divider -->
         <View

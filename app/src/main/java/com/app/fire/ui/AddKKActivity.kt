@@ -49,7 +49,7 @@ class AddKKActivity : BaseView() {
         binding.btnSubmit.setOnClickListener {
             goToPageActivityResult(StockDistributionActivity::class.java, 100)
         }
-        adapter = StockAdapter(true,
+        adapter = StockAdapter(this, isShowCountItem = true,
             onClick = { item ->
             })
 

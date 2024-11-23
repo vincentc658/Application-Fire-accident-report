@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.fire.adapter.DistributionPlanAdapter
 import com.app.fire.adapter.KKAdapter
 import com.app.fire.databinding.FragmentListOrganizationBinding
 import com.app.fire.model.KKModel
@@ -71,6 +70,7 @@ class ListKKFragment: Fragment() {
                 namaKK = document.data["namaKK"].toString(),
                 time = document.data["time"].toString().toLong()
             )
+            logisticPlan.id= documentId
 
             val subDocuments = FirebaseFirestore.getInstance()
                 .collection(KK)

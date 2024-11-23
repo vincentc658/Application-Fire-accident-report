@@ -61,9 +61,10 @@ class ListAccidentFragment : Fragment() {
                             korbanTerdampak = document.data["korbanTerdampak"].toString().toInt(),
                             jumlahKK = document.data["jumlahKK"].toString().toInt(),
                             lokasi = document.data["lokasi"].toString(),
-                            waktu = document.data["waktu"].toString(),
+                            waktu = "${document.data["waktu"].toString()} / ${document.data["jam"].toString().toValidString()}",
                             time = document.data["time"].toString().toLong()
                         )
+                        accidentModelFirestore.id= document.id
                         accidents.add(accidentModelFirestore)
                     }
                     val sortedBy =accidents.sortedBy { it.time }
@@ -76,5 +77,11 @@ class ListAccidentFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchChatMessages()
+    }
+    private fun String.toValidString(): String{
+        if(this=="null"){
+            return "-"
+        }
+        return this
     }
 }

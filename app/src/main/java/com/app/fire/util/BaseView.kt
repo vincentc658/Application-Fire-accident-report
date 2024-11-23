@@ -14,6 +14,7 @@ open class BaseView : BaseAppCompat() {
         const val LOGISTIC="logistik"
         const val NOTIFICATIONS="notifications"
         const val KK="kk"
+        const val FIRE_ACCIDENT="fire_accidents"
     }
     fun <T : Serializable?> getSerializable(intent: Intent, key: String, className: Class<T>): T {
         return if (Build.VERSION.SDK_INT >= 33)
